@@ -7,6 +7,10 @@
   ],
   "client": [
   ],
+  "server": [
+    "LegacyQueryHandlerMixin",
+    "ServerNetworkIOMixin"
+  ],
   "injectors": {
     "defaultRequire": 1
   }
