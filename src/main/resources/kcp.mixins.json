@@ -6,10 +6,11 @@
   "mixins": [
   ],
   "client": [
+    "client.ClientConnectionMixin"
   ],
   "server": [
-    "LegacyQueryHandlerMixin",
-    "ServerNetworkIOMixin"
+    "server.LegacyQueryHandlerMixin",
+    "server.ServerNetworkIOMixin"
   ],
   "injectors": {
     "defaultRequire": 1

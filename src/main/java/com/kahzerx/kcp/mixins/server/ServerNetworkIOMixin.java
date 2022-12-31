@@ -1,4 +1,4 @@
-package com.kahzerx.kcp.mixins;
+package com.kahzerx.kcp.mixins.server;
 
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
@@ -40,7 +40,7 @@ public abstract class ServerNetworkIOMixin {
             ServerNetworkIo networkIo = (ServerNetworkIo) (Object) this;
             kcpServer.group(DEFAULT_CHANNEL.get()).
                     channel(UkcpServerChannel.class).
-                    childHandler(new ChannelInitializer<Channel>() {
+                    childHandler(new ChannelInitializer<>() {
                         @Override
                         protected void initChannel(@NotNull Channel channel) {
                             channel.config().setOption(UkcpChannelOption.UKCP_NODELAY, true);

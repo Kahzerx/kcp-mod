@@ -1,4 +1,4 @@
-package com.kahzerx.kcp.mixins;
+package com.kahzerx.kcp.mixins.server;
 
 import io.jpower.kcp.netty.UkcpChannel;
 import io.netty.channel.ChannelHandlerContext;
