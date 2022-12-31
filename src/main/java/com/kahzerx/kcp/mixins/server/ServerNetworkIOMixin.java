@@ -1,13 +1,13 @@
 package com.kahzerx.kcp.mixins.server;
 
 
-import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import io.jpower.kcp.netty.ChannelOptionHelper;
-import io.jpower.kcp.netty.UkcpChannel;
 import io.jpower.kcp.netty.UkcpChannelOption;
 import io.jpower.kcp.netty.UkcpServerChannel;
 import io.netty.bootstrap.UkcpServerBootstrap;
-import io.netty.channel.*;
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelInitializer;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 import net.minecraft.network.*;
@@ -52,7 +52,6 @@ public abstract class ServerNetworkIOMixin {
                                     addLast("encoder", new PacketEncoder(NetworkSide.CLIENTBOUND));
                             int i = networkIo.getServer().getRateLimit();
                             ClientConnection clientConnection = i > 0 ? new RateLimitedConnection(i) : new ClientConnection(NetworkSide.SERVERBOUND);
-                            System.out.println(clientConnection);
                             networkIo.getConnections().add(clientConnection);
                             channel.pipeline().addLast("packet_handler", clientConnection);
                             clientConnection.setPacketListener(new ServerHandshakeNetworkHandler(networkIo.getServer(), clientConnection));
