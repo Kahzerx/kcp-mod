@@ -59,7 +59,8 @@ public abstract class ServerNetworkIOMixin {
                         }
                     });
             ChannelOptionHelper.nodelay(kcpServer, true, 20, 3, true).
-                    childOption(UkcpChannelOption.UKCP_MTU, 512);
+                    childOption(UkcpChannelOption.UKCP_MTU, 512).
+                    childOption(UkcpChannelOption.UKCP_AUTO_SET_CONV, true);
             ChannelFuture f = kcpServer.localAddress(address, PORT).bind().syncUninterruptibly();
             this.channels.add(f);
         }

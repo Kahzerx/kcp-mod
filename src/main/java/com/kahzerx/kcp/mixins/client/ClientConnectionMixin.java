@@ -1,9 +1,10 @@
 package com.kahzerx.kcp.mixins.client;
 
-import io.jpower.kcp.netty.*;
+import io.jpower.kcp.netty.ChannelOptionHelper;
+import io.jpower.kcp.netty.UkcpChannel;
+import io.jpower.kcp.netty.UkcpChannelOption;
+import io.jpower.kcp.netty.UkcpClientChannel;
 import io.netty.bootstrap.Bootstrap;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.handler.timeout.ReadTimeoutHandler;
@@ -15,7 +16,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.net.InetSocketAddress;
@@ -23,12 +23,6 @@ import java.net.InetSocketAddress;
 @Mixin(ClientConnection.class)
 public class ClientConnectionMixin {
     @Shadow @Final public static Lazy<NioEventLoopGroup> CLIENT_IO_GROUP;
-
-    @Inject(method = "channelActive", at = @At(value = "HEAD"))
-    private void onChannelActive(ChannelHandlerContext context, CallbackInfo ci) {
-        UkcpChannel ukcpChannel = (UkcpChannel) context.channel();
-        ukcpChannel.conv(10);
-    }
 
     @Inject(method = "connect", at = @At(value = "HEAD"), cancellable = true)
     private static void onConnect(InetSocketAddress address, boolean useEpoll, CallbackInfoReturnable<ClientConnection> cir) {
@@ -48,7 +42,8 @@ public class ClientConnectionMixin {
                     }
                 });
         ChannelOptionHelper.nodelay(kcpClient, true, 20, 3, true).
-                option(UkcpChannelOption.UKCP_MTU, 512);
+                option(UkcpChannelOption.UKCP_MTU, 512).
+                option(UkcpChannelOption.UKCP_AUTO_SET_CONV, true);
         kcpClient.connect(address.getAddress(), address.getPort()).syncUninterruptibly();
         cir.setReturnValue(clientConnection);
     }

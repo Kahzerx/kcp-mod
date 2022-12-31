@@ -9,7 +9,6 @@
     "client.ClientConnectionMixin"
   ],
   "server": [
-    "server.LegacyQueryHandlerMixin",
     "server.ServerNetworkIOMixin"
   ],
   "injectors": {
