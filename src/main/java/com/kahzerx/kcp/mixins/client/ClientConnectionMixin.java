@@ -33,6 +33,7 @@ public class ClientConnectionMixin {
                 handler(new ChannelInitializer<UkcpChannel>() {
                     @Override
                     protected void initChannel(@NotNull UkcpChannel channel) {
+                        channel.config().setOption(UkcpChannelOption.UKCP_NODELAY, true);
                         channel.pipeline().addLast("timeout", new ReadTimeoutHandler(30)).
                                 addLast("splitter", new SplitterHandler()).
                                 addLast("decoder", new DecoderHandler(NetworkSide.CLIENTBOUND)).

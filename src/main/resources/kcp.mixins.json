@@ -6,6 +6,7 @@
   "mixins": [
   ],
   "client": [
+    "client.AddServerScreenMixin",
     "client.ClientConnectionMixin"
   ],
   "server": [
