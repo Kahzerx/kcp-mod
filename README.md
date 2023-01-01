@@ -1,7 +1,7 @@
 ### TODO
 
 - [x] The KCP/TCP toggle is ugly af
-- [ ] The KCP port on server is hardcoded, add config file :/
+- [x] The KCP port on server is hardcoded, add config file :/
 - [x] Workflows in general...
 - [ ] Ugly exception dump on KCP protocol "wrong port"
 - [ ] Multi version prob
