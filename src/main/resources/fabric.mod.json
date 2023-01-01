@@ -3,8 +3,8 @@
   "id": "kcp",
   "version": "${version}",
 
-  "name": "Example Mod",
-  "description": "This is an example description! Tell everyone what your mod is about!",
+  "name": "KCP Protocol",
+  "description": "Implementation of the KCP protocol for minecraft transport layer",
   "authors": [
     "Kahzerx"
   ],
@@ -29,7 +29,5 @@
     "minecraft": "~1.19.3",
     "java": ">=17"
   },
-  "suggests": {
-    "another-mod": "*"
-  }
+  "suggests": { }
 }
