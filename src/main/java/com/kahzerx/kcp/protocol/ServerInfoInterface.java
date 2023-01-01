@@ -1,4 +1,4 @@
-package com.kahzerx.kcp.helpers;
+package com.kahzerx.kcp.protocol;
 
 import com.kahzerx.kcp.protocol.Protocols;
 
