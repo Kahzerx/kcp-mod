@@ -32,9 +32,15 @@ jobs:
         run: chmod +x ./gradlew
       - name: build
         run: ./gradlew build
+      - name: Find correct JAR
+        id: findjar
+        if: ${{ runner.os == 'Linux' && matrix.java == '17' }}
+        run: |
+          output="$(find build/libs/ ! -name "*-dev.jar" ! -name "*-sources.jar" -type f -printf "%f\n")"
+          echo "::set-output name=jarname::$output"
       - name: capture build artifacts
-        if: ${{ runner.os == 'Linux' && matrix.java == '17' }} # Only upload artifacts built from latest java on one OS
-        uses: actions/upload-artifact@v3
+        if: ${{ runner.os == 'Linux' && matrix.java == '17' }}
+        uses: actions/upload-artifact@v2
         with:
-          name: Artifacts
-          path: build/libs/
+          name: ${{ steps.findjar.outputs.jarname }}
+          path: build/libs/${{ steps.findjar.outputs.jarname }}
