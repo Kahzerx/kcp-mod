@@ -6,7 +6,8 @@
   "name": "KCP Protocol",
   "description": "Implementation of the KCP protocol for minecraft transport layer",
   "authors": [
-    "Kahzerx"
+    "Kahzerx",
+    "EDDxample"
   ],
   "contact": {
     "homepage": "https://fabricmc.net/",
