@@ -10,6 +10,7 @@
     "client.ConnectScreenMixins$ConnectScreenMixin",
     "client.ConnectScreenMixins$ConnectScreenThreadMixin",
     "client.MultiplayerScreenMixin",
+    "client.MultiplayerServerListPingerMixin",
     "client.ServerInfoMixin"
   ],
   "server": [
