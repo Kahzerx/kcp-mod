@@ -1,6 +1,7 @@
 package com.kahzerx.kcp.mixins.server;
 
 
+import com.kahzerx.kcp.KCPMod;
 import io.jpower.kcp.netty.ChannelOptionHelper;
 import io.jpower.kcp.netty.UkcpChannelOption;
 import io.jpower.kcp.netty.UkcpServerChannel;
@@ -15,6 +16,7 @@ import net.minecraft.server.ServerNetworkIo;
 import net.minecraft.server.network.ServerHandshakeNetworkHandler;
 import net.minecraft.util.Lazy;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -27,14 +29,21 @@ import java.util.List;
 
 @Mixin(ServerNetworkIo.class)
 public abstract class ServerNetworkIOMixin {
+
     @Shadow @Final private List<ChannelFuture> channels;
 
     @Shadow @Final public static Lazy<NioEventLoopGroup> DEFAULT_CHANNEL;
 
+    @Shadow @Final private static Logger LOGGER;
+
     @Inject(method = "bind", at = @At(value = "HEAD"))
     private void onBind(InetAddress address, int port, CallbackInfo ci) {
+        if (!KCPMod.config.isEnabled()) {
+            return;
+        }
+        LOGGER.info("Starting KCP listener on port " + KCPMod.config.getPort());
         List<ChannelFuture> list = this.channels;
-        int PORT = 25566;
+        int PORT = KCPMod.config.getPort();
         synchronized (list) {
             UkcpServerBootstrap kcpServer = new UkcpServerBootstrap();
             ServerNetworkIo networkIo = (ServerNetworkIo) (Object) this;

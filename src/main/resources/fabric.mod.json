@@ -19,7 +19,9 @@
 
   "environment": "*",
   "entrypoints": {
-    "main": [ ]
+    "main": [
+      "com.kahzerx.kcp.KCPMod"
+    ]
   },
   "mixins": [
     "kcp.mixins.json"
