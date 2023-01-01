@@ -12,6 +12,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(AddServerScreen.class)
@@ -26,7 +27,7 @@ public class AddServerScreenMixin extends Screen {
     @Inject(method = "init", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/widget/TextFieldWidget;setText(Ljava/lang/String;)V", ordinal = 1))
     private void drawProtocolSelect(CallbackInfo ci) {
         Protocols p = ((ServerInfoInterface) server).getProtocol();
-        this.proto = this.addDrawableChild(ButtonWidget.builder(Text.literal(p.toString()), button -> this.toggle()).dimensions(this.width / 2 - 100, this.height / 4 + 92, 200, 20).build());
+        this.proto = this.addDrawableChild(ButtonWidget.builder(Text.literal(p.toString()), button -> this.toggle()).dimensions(this.width / 2 - 100, this.height / 4 + 96, 200, 20).build());
     }
 
     private void toggle() {
@@ -44,5 +45,10 @@ public class AddServerScreenMixin extends Screen {
         } else {
             ((ServerInfoInterface) server).setProtocol(Protocols.KCP);
         }
+    }
+
+    @Redirect(method = "init", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/widget/ButtonWidget$Builder;dimensions(IIII)Lnet/minecraft/client/gui/widget/ButtonWidget$Builder;"))
+    private ButtonWidget.Builder adjustButtons(ButtonWidget.Builder instance, int x, int y, int width, int height) {
+        return instance.dimensions(x, y - 18 + 24, width, height);
     }
 }
