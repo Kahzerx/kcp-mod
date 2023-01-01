@@ -7,7 +7,9 @@
   ],
   "client": [
     "client.AddServerScreenMixin",
-    "client.ClientConnectionMixin"
+    "client.ClientConnectionMixin",
+    "client.MultiplayerScreenMixin",
+    "client.ServerInfoMixin"
   ],
   "server": [
     "server.ServerNetworkIOMixin"
