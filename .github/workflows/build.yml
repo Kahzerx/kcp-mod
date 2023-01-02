@@ -37,7 +37,7 @@ jobs:
         if: ${{ runner.os == 'Linux' && matrix.java == '17' }}
         run: |
           output="$(find build/libs/ ! -name "*-dev.jar" ! -name "*-sources.jar" -type f -printf "%f\n")"
-          echo "::set-output name=jarname::$output"
+          echo "jarname=$output" >> $GITHUB_OUTPUT
       - name: capture build artifacts
         if: ${{ runner.os == 'Linux' && matrix.java == '17' }}
         uses: actions/upload-artifact@v2
