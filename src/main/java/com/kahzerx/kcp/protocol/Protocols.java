@@ -5,11 +5,12 @@ public enum Protocols {
     KCP("KCP");
 
     private final String value;
-    public String toString() {
-        return value;
-    }
 
     Protocols(String value) {
         this.value = value;
+    }
+
+    public String toString() {
+        return value;
     }
 }
