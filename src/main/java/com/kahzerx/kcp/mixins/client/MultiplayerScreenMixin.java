@@ -16,14 +16,15 @@ public class MultiplayerScreenMixin {
 
     @Shadow private ServerInfo selectedEntry;
 
-    @Redirect(method = "method_19915", at = @At(value = "NEW", target = "net/minecraft/client/network/ServerInfo"))
-    private ServerInfo onNewEditServerInfo(String name, String address, boolean local) {
+    @Redirect(method = "method_19915", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ServerInfo;copyWithSettingsFrom(Lnet/minecraft/client/network/ServerInfo;)V"))
+    private void onNewEditServerInfo(ServerInfo instance, ServerInfo serverInfo) {
         MultiplayerServerListWidget.Entry entry = this.serverListWidget.getSelectedOrNull();
-        ServerInfo serverInfo = ((MultiplayerServerListWidget.ServerEntry)entry).getServer();
-
-        ServerInfo server = new ServerInfo(name, address, local);
-        ((ServerInfoInterface) server).setProtocol(((ServerInfoInterface) serverInfo).getProtocol());
-        return server;
+        if (entry instanceof MultiplayerServerListWidget.ServerEntry) {
+            ServerInfo selected = ((MultiplayerServerListWidget.ServerEntry)entry).getServer();
+            this.selectedEntry = new ServerInfo(selected.name, selected.address, false);
+            this.selectedEntry.copyWithSettingsFrom(selected);
+            ((ServerInfoInterface) this.selectedEntry).setProtocol(((ServerInfoInterface) selected).getProtocol());
+        }
     }
 
     @Redirect(method = "editEntry", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/multiplayer/MultiplayerServerListWidget$ServerEntry;getServer()Lnet/minecraft/client/network/ServerInfo;"))

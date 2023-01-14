@@ -9,12 +9,10 @@ import io.netty.bootstrap.UkcpServerBootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
-import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 import net.minecraft.network.*;
 import net.minecraft.server.ServerNetworkIo;
 import net.minecraft.server.network.ServerHandshakeNetworkHandler;
-import net.minecraft.util.Lazy;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.Final;
@@ -27,12 +25,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.net.InetAddress;
 import java.util.List;
 
+import static net.minecraft.server.ServerNetworkIo.DEFAULT_CHANNEL;
+
 @Mixin(ServerNetworkIo.class)
 public abstract class ServerNetworkIOMixin {
 
     @Shadow @Final private List<ChannelFuture> channels;
-
-    @Shadow @Final public static Lazy<NioEventLoopGroup> DEFAULT_CHANNEL;
 
     @Shadow @Final private static Logger LOGGER;
 

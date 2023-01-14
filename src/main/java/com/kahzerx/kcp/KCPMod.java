@@ -8,7 +8,6 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 import java.nio.file.Path;
-import java.util.Arrays;
 
 public class KCPMod implements ModInitializer {
     public static ModConfig config;

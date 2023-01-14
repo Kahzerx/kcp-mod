@@ -1,8 +1,8 @@
 package com.kahzerx.kcp.mixins.client;
 
-import com.kahzerx.kcp.protocol.ServerInfoInterface;
 import com.kahzerx.kcp.protocol.KCPClientConnection;
 import com.kahzerx.kcp.protocol.Protocols;
+import com.kahzerx.kcp.protocol.ServerInfoInterface;
 import net.minecraft.client.network.MultiplayerServerListPinger;
 import net.minecraft.client.network.ServerInfo;
 import net.minecraft.network.ClientConnection;
