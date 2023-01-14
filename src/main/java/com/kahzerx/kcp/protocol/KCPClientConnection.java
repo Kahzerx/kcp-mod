@@ -21,7 +21,6 @@ public class KCPClientConnection {
         ClientConnection clientConnection = new ClientConnection(NetworkSide.CLIENTBOUND);
         Bootstrap kcpClient = new Bootstrap();
         kcpClient = ChannelOptionHelper.nodelay(kcpClient, true, 10, 2, true).
-                option(UkcpChannelOption.UKCP_MTU, 2048).
                 option(UkcpChannelOption.UKCP_AUTO_SET_CONV, true);
         kcpClient.group(CLIENT_IO_GROUP.get()).
                 channel(UkcpClientChannel.class).

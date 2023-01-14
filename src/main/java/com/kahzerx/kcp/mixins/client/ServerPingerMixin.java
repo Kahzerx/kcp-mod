@@ -28,7 +28,6 @@ public class ServerPingerMixin {
         if (p == Protocols.KCP) {
             Bootstrap kcpClient = new Bootstrap();
             kcpClient = ChannelOptionHelper.nodelay(kcpClient, true, 10, 2, true).
-                    option(UkcpChannelOption.UKCP_MTU, 2048).
                     option(UkcpChannelOption.UKCP_AUTO_SET_CONV, true);
             kcpClient.group(ClientConnection.CLIENT_IO_GROUP.get()).
                     channel(UkcpClientChannel.class).
