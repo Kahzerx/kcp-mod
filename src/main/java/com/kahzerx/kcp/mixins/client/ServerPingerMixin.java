@@ -27,6 +27,9 @@ public class ServerPingerMixin {
         Protocols p = ((ServerInfoInterface) info).getProtocol();
         if (p == Protocols.KCP) {
             Bootstrap kcpClient = new Bootstrap();
+            kcpClient = ChannelOptionHelper.nodelay(kcpClient, true, 20, 3, true).
+                    option(UkcpChannelOption.UKCP_MTU, 2048).
+                    option(UkcpChannelOption.UKCP_AUTO_SET_CONV, true);
             kcpClient.group(ClientConnection.CLIENT_IO_GROUP.get()).
                     channel(UkcpClientChannel.class).
                     handler(new ChannelInitializer<UkcpChannel>() {
@@ -36,9 +39,6 @@ public class ServerPingerMixin {
                             channel.pipeline().addLast(new SimpleChannelPinger(address, info));
                         }
                     });
-            ChannelOptionHelper.nodelay(kcpClient, true, 20, 3, true).
-                    option(UkcpChannelOption.UKCP_MTU, 512).
-                    option(UkcpChannelOption.UKCP_AUTO_SET_CONV, true);
             kcpClient.connect(address.getAddress(), address.getPort());
             ci.cancel();
         }

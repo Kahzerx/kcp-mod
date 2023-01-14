@@ -20,6 +20,9 @@ public class KCPClientConnection {
     public static ClientConnection connect(InetSocketAddress address) {
         ClientConnection clientConnection = new ClientConnection(NetworkSide.CLIENTBOUND);
         Bootstrap kcpClient = new Bootstrap();
+        kcpClient = ChannelOptionHelper.nodelay(kcpClient, true, 20, 3, true).
+                option(UkcpChannelOption.UKCP_MTU, 2048).
+                option(UkcpChannelOption.UKCP_AUTO_SET_CONV, true);
         kcpClient.group(CLIENT_IO_GROUP.get()).
                 channel(UkcpClientChannel.class).
                 handler(new ChannelInitializer<UkcpChannel>() {
@@ -34,9 +37,6 @@ public class KCPClientConnection {
                                 addLast("packet_handler", clientConnection);
                     }
                 });
-        ChannelOptionHelper.nodelay(kcpClient, true, 20, 3, true).
-                option(UkcpChannelOption.UKCP_MTU, 512).
-                option(UkcpChannelOption.UKCP_AUTO_SET_CONV, true);
         kcpClient.connect(address.getAddress(), address.getPort()).syncUninterruptibly();
         return clientConnection;
     }
