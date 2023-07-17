@@ -10,8 +10,8 @@
     "EDDxample"
   ],
   "contact": {
-    "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
+    "homepage": "https://github.com/Kahzerx/kcp-mod/",
+    "sources": "https://github.com/Kahzerx/kcp-mod/"
   },
 
   "license": "CC0-1.0",
@@ -28,8 +28,8 @@
   ],
 
   "depends": {
-    "fabricloader": ">=0.14.12",
-    "minecraft": "~1.19.3",
+    "fabricloader": ">=0.14.21",
+    "minecraft": "~1.20",
     "java": ">=17"
   },
   "suggests": { }

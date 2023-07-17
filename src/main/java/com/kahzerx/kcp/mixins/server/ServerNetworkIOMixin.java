@@ -9,6 +9,7 @@ import io.netty.bootstrap.UkcpServerBootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
+import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 import net.minecraft.network.*;
 import net.minecraft.server.ServerNetworkIo;
@@ -25,8 +26,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.net.InetAddress;
 import java.util.List;
 
-import static net.minecraft.server.ServerNetworkIo.DEFAULT_CHANNEL;
-
 @Mixin(ServerNetworkIo.class)
 public abstract class ServerNetworkIOMixin {
 
@@ -36,27 +35,30 @@ public abstract class ServerNetworkIOMixin {
 
     @Inject(method = "bind", at = @At(value = "HEAD"))
     private void onBind(InetAddress address, int port, CallbackInfo ci) {
-        if (!KCPMod.config.isEnabled()) {
+        if (!KCPMod.config.enabled()) {
             return;
         }
-        LOGGER.info("Starting KCP listener on port " + KCPMod.config.getPort());
+        LOGGER.info("Starting KCP listener on port " + KCPMod.config.port());
         List<ChannelFuture> list = this.channels;
-        int PORT = KCPMod.config.getPort();
+        int PORT = KCPMod.config.port();
         synchronized (list) {
             UkcpServerBootstrap kcpServer = new UkcpServerBootstrap();
             ServerNetworkIo networkIo = (ServerNetworkIo) (Object) this;
-            kcpServer.group(DEFAULT_CHANNEL.get()).
+            kcpServer.group(new NioEventLoopGroup()).
                     channel(UkcpServerChannel.class).
                     childHandler(new ChannelInitializer<>() {
                         @Override
                         protected void initChannel(@NotNull Channel channel) {
                             channel.config().setOption(UkcpChannelOption.UKCP_NODELAY, true);
-                            channel.pipeline().addLast("timeout", new ReadTimeoutHandler(30)).
-                                    addLast("legacy_query", new LegacyQueryHandler(networkIo)).
+                            channel.pipeline().
+                                    addLast("timeout", new ReadTimeoutHandler(30)).
                                     addLast("splitter", new SplitterHandler()).
                                     addLast("decoder", new DecoderHandler(NetworkSide.SERVERBOUND)).
                                     addLast("prepender", new SizePrepender()).
-                                    addLast("encoder", new PacketEncoder(NetworkSide.CLIENTBOUND));
+                                    addLast("encoder", new PacketEncoder(NetworkSide.CLIENTBOUND)).
+                                    addLast("unbundler", new PacketUnbundler(NetworkSide.CLIENTBOUND)).
+                                    addLast("bundler", new PacketBundler(NetworkSide.SERVERBOUND));
+
                             int i = networkIo.getServer().getRateLimit();
                             ClientConnection clientConnection = i > 0 ? new RateLimitedConnection(i) : new ClientConnection(NetworkSide.SERVERBOUND);
                             networkIo.getConnections().add(clientConnection);

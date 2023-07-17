@@ -33,7 +33,7 @@ public class ServerPingerMixin {
                     channel(UkcpClientChannel.class).
                     handler(new ChannelInitializer<UkcpChannel>() {
                         @Override
-                        protected void initChannel(@NotNull UkcpChannel channel) throws Exception {
+                        protected void initChannel(@NotNull UkcpChannel channel) {
                             channel.config().setOption(UkcpChannelOption.UKCP_NODELAY, true);
                             channel.pipeline().addLast(new SimpleChannelPinger(address, info));
                         }

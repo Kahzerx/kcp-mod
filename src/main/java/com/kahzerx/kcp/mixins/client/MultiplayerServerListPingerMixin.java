@@ -18,7 +18,7 @@ public class MultiplayerServerListPingerMixin {
     private ClientConnection onServerPing(InetSocketAddress address, boolean useEpoll, final ServerInfo entry, final Runnable saver) {
         Protocols protocol = ((ServerInfoInterface) entry).getProtocol();
         if (protocol == Protocols.KCP) {
-            return KCPClientConnection.connect(address);
+            return KCPClientConnection.connectClient(address);
         } else {
             return ClientConnection.connect(address, useEpoll);
         }
