@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version '1.0-SNAPSHOT'
+	id 'fabric-loom' version '1.8-SNAPSHOT'
 	id 'maven-publish'
 }
 
@@ -24,8 +24,8 @@ dependencies {
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-	implementation "io.jpower.kcp:kcp-netty:1.5.0"
-	include "io.jpower.kcp:kcp-netty:1.5.0"
+	implementation 'org.apache.commons:commons-compress:1.22'
+	include 'org.apache.commons:commons-compress:1.22'
 }
 
 processResources {

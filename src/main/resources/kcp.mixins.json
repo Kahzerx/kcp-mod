@@ -4,15 +4,16 @@
   "package": "com.kahzerx.kcp.mixins",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "server.MinecraftServerMixin"
   ],
   "client": [
     "client.AddServerScreenMixin",
-    "client.ConnectScreenMixins$ConnectScreenMixin",
-    "client.ConnectScreenMixins$ConnectScreenThreadMixin",
+    "client.ConnectScreenMixin",
+    "client.ConnectScreenThreadMixin",
+    "client.DisconnectedScreenMixin",
+    "client.MinecraftClientMixin",
     "client.MultiplayerScreenMixin",
-    "client.MultiplayerServerListPingerMixin",
-    "client.ServerInfoMixin",
-    "client.ServerPingerMixin"
+    "client.ServerInfoMixin"
   ],
   "server": [
     "server.ServerNetworkIOMixin"

@@ -1,7 +1,8 @@
 package com.kahzerx.kcp;
 
 import com.kahzerx.kcp.config.ModConfig;
-import net.fabricmc.api.ModInitializer;
+import com.kahzerx.kcp.kcp.KCPExecutor;
+import net.fabricmc.api.DedicatedServerModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -9,21 +10,23 @@ import org.apache.logging.log4j.Logger;
 import java.io.*;
 import java.nio.file.Path;
 
-public class KCPMod implements ModInitializer {
+public class KCPMod implements DedicatedServerModInitializer {
     public static ModConfig config;
     private final Logger LOGGER = LogManager.getLogger();
 
+    @SuppressWarnings("unused")
     @Override
-    public void onInitialize() {
+    public void onInitializeServer() {
+        Runtime.getRuntime().addShutdownHook(new Thread(KCPExecutor::stop));
         Path configDir = FabricLoader.getInstance().getConfigDir();
         if (configDir.isAbsolute()) {
             return;
         }
-        File modConfig = new File(configDir + "/" + "kcp.conf");
+        File modConfig = new File(configDir + File.separator + "kcp.conf");
         if (!modConfig.isFile()) {
             try {
-                modConfig.createNewFile();
-                modConfig.setWritable(true);
+                boolean created = modConfig.createNewFile();
+                boolean writable = modConfig.setWritable(true);
                 FileWriter fw = new FileWriter(modConfig);
                 ModConfig cfg = new ModConfig(false, 25577);
                 fw.write(cfg.toString());
@@ -43,7 +46,7 @@ public class KCPMod implements ModInitializer {
             int port = 0;
             boolean enabled = false;
             for (String kv : kvs) {
-                String[] keyValues = kv.split("=");
+                String[] keyValues = kv.trim().split("=");
                 if (keyValues.length < 2) {
                     continue;
                 }
