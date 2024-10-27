@@ -1,8 +1,5 @@
 name: Publish Release
-on:
-  release:
-    types:
-      - published
+on: [ workflow_dispatch ]
 jobs:
   build:
     strategy:
@@ -30,14 +27,11 @@ jobs:
         run: chmod +x ./gradlew
       - name: build
         run: ./gradlew build
-      - name: Find correct JAR
-        id: findjar
-        run: |
-          output="$(find build/libs/ ! -name "*-dev.jar" ! -name "*-sources.jar" -type f -printf "%f\n")"
-          echo "jarname=$output" >> $GITHUB_OUTPUT
-      - name: Upload assets to GitHub
-        uses: AButler/upload-release-assets@v3.0
-        if: ${{ runner.os == 'Linux' && matrix.java == '17' }}
+      - name: Upload
+        uses: marvinpinto/action-automatic-releases@latest
         with:
-          files: build/libs/${{ steps.findjar.outputs.jarname }}
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          prerelease: false
+          automatic_release_tag: 1.0.1
+          files: |
+            build/libs/*.jar
