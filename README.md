@@ -18,11 +18,11 @@ Set enabled to true and configure whatever **UDP** port you want to use as KCP r
 ## Client
 
 On multiplayer add/edit server you will see an extra button that works as a toggle.
-You can switch between TCP(minecraft default) and KCP
+You can switch between TCP(minecraft default) and KCP:
 
 ![img.png](docs/img.png)
 
-Specify kcp server host & port
+Specify kcp server host & port.
 
 > [!WARNING]
 > Server ping is not done yet! so kcp servers wont ping nor load image/motd on multiplayer list.
