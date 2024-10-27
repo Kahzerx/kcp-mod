@@ -21,7 +21,7 @@ public class MultiplayerScreenMixin {
         MultiplayerServerListWidget.Entry entry = this.serverListWidget.getSelectedOrNull();
         if (entry instanceof MultiplayerServerListWidget.ServerEntry) {
             ServerInfo selected = ((MultiplayerServerListWidget.ServerEntry)entry).getServer();
-            this.selectedEntry = new ServerInfo(selected.name, selected.address, false);
+            this.selectedEntry = new ServerInfo(selected.name, selected.address, selected.getServerType());
             this.selectedEntry.copyWithSettingsFrom(selected);
             ((ServerInfoInterface) this.selectedEntry).setProtocol(((ServerInfoInterface) selected).getProtocol());
         }
