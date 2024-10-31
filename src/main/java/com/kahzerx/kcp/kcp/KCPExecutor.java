@@ -35,12 +35,11 @@ public class KCPExecutor {
         localClientPort = localPort;
         Thread t = new Thread(() -> new KCPExecutor().runBinWithConfig(
                 new String[]{
-                        !OSUtils.getOSName().equalsIgnoreCase("windows") ? String.format("./%s", clientFile.getName()) : clientFile.getName(),
+                        !OSUtils.getOSName().equalsIgnoreCase("windows") ? String.format("./%s", clientFile.getAbsolutePath()) : clientFile.getAbsolutePath(),
                         "-r", String.format("%s:%d", remoteHost, remotePort),
                         "-l", String.format(":%d", localPort),
                         "-mode", "fast3"
-                },
-                binPath
+                }
         ));
         t.setName("KCP Client Process");
         t.start();
@@ -67,13 +66,11 @@ public class KCPExecutor {
             return;
         }
         LOGGER.info("Got a valid server!");
-        String dataPath = FabricLoader.getInstance().getConfigDir() + File.separator + "kcp_data" + File.separator + this.binDir;
         Thread t = new Thread(() -> new KCPExecutor().runBinWithConfig(
                 new String[]{
-                        !OSUtils.getOSName().equalsIgnoreCase("windows") ? String.format("./%s", serverFile.getName()) : serverFile.getName(),
+                        !OSUtils.getOSName().equalsIgnoreCase("windows") ? String.format("./%s", serverFile.getAbsolutePath()) : serverFile.getAbsolutePath(),
                         "-c", configFile.getAbsolutePath(),
-                },
-                dataPath
+                }
         ));
         t.setName("KCP Server Process");
         t.start();
@@ -117,9 +114,9 @@ public class KCPExecutor {
         }
     }
 
-    private void runBinWithConfig(String[] command, String binDir) {
+    private void runBinWithConfig(String[] command) {
         try {
-            process = new ProcessBuilder(command).directory(new File(binDir)).redirectErrorStream(true).start();
+            process = new ProcessBuilder(command).redirectErrorStream(true).start();
         } catch (IOException e) {
             e.printStackTrace();
             return;
