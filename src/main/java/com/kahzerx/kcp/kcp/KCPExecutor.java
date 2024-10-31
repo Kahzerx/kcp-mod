@@ -31,17 +31,16 @@ public class KCPExecutor {
             }
         }
         LOGGER.info("Got a valid client!");
-        String dataPath = FabricLoader.getInstance().getConfigDir() + File.separator + "kcp_data";
+        String binPath = FabricLoader.getInstance().getConfigDir() + File.separator + "kcp_data" + File.separator + this.binDir;
         localClientPort = localPort;
-        String relativeBinPath = this.binDir + File.separator + clientFile.getName();
         Thread t = new Thread(() -> new KCPExecutor().runBinWithConfig(
                 new String[]{
-                        !OSUtils.getOSName().equalsIgnoreCase("windows") ? String.format("./%s", relativeBinPath) : relativeBinPath,
+                        !OSUtils.getOSName().equalsIgnoreCase("windows") ? String.format("./%s", clientFile.getName()) : clientFile.getName(),
                         "-r", String.format("%s:%d", remoteHost, remotePort),
                         "-l", String.format(":%d", localPort),
                         "-mode", "fast3"
                 },
-                dataPath
+                binPath
         ));
         t.setName("KCP Client Process");
         t.start();
@@ -68,13 +67,11 @@ public class KCPExecutor {
             return;
         }
         LOGGER.info("Got a valid server!");
-        String dataPath = FabricLoader.getInstance().getConfigDir() + File.separator + "kcp_data";
-        String relativeBinPath = this.binDir + File.separator + serverFile.getName();
-        String relativeConfigPath = configDir + File.separator + "kcp.json";
+        String dataPath = FabricLoader.getInstance().getConfigDir() + File.separator + "kcp_data" + File.separator + this.binDir;
         Thread t = new Thread(() -> new KCPExecutor().runBinWithConfig(
                 new String[]{
-                        !OSUtils.getOSName().equalsIgnoreCase("windows") ? String.format("./%s", relativeBinPath) : relativeBinPath,
-                        "-c", relativeConfigPath,
+                        !OSUtils.getOSName().equalsIgnoreCase("windows") ? String.format("./%s", serverFile.getName()) : serverFile.getName(),
+                        "-c", configFile.getAbsolutePath(),
                 },
                 dataPath
         ));
@@ -120,9 +117,9 @@ public class KCPExecutor {
         }
     }
 
-    private void runBinWithConfig(String[] command, String dataDir) {
+    private void runBinWithConfig(String[] command, String binDir) {
         try {
-            process = new ProcessBuilder(command).directory(new File(dataDir)).redirectErrorStream(true).start();
+            process = new ProcessBuilder(command).directory(new File(binDir)).redirectErrorStream(true).start();
         } catch (IOException e) {
             e.printStackTrace();
             return;
