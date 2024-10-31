@@ -35,7 +35,7 @@ public class KCPExecutor {
         localClientPort = localPort;
         Thread t = new Thread(() -> new KCPExecutor().runBinWithConfig(
                 new String[]{
-                        !OSUtils.getOSName().equalsIgnoreCase("windows") ? String.format("./%s", clientFile.getAbsolutePath()) : clientFile.getAbsolutePath(),
+                        clientFile.getAbsolutePath(),
                         "-r", String.format("%s:%d", remoteHost, remotePort),
                         "-l", String.format(":%d", localPort),
                         "-mode", "fast3"
@@ -68,7 +68,7 @@ public class KCPExecutor {
         LOGGER.info("Got a valid server!");
         Thread t = new Thread(() -> new KCPExecutor().runBinWithConfig(
                 new String[]{
-                        !OSUtils.getOSName().equalsIgnoreCase("windows") ? String.format("./%s", serverFile.getAbsolutePath()) : serverFile.getAbsolutePath(),
+                        serverFile.getAbsolutePath(),
                         "-c", configFile.getAbsolutePath(),
                 }
         ));
