@@ -1,6 +1,5 @@
 package com.kahzerx.kcp.kcp;
 
-import com.kahzerx.kcp.utils.OSUtils;
 import com.mojang.logging.LogUtils;
 import net.fabricmc.loader.api.FabricLoader;
 import org.slf4j.Logger;
@@ -31,7 +30,6 @@ public class KCPExecutor {
             }
         }
         LOGGER.info("Got a valid client!");
-        String binPath = FabricLoader.getInstance().getConfigDir() + File.separator + "kcp_data" + File.separator + this.binDir;
         localClientPort = localPort;
         Thread t = new Thread(() -> new KCPExecutor().runBinWithConfig(
                 new String[]{
