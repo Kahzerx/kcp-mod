@@ -5,10 +5,10 @@ jobs:
     strategy:
       matrix:
         # Use these Java versions
-        java: [ 17 ]
+        java: [ 21 ]
         # and run on both Linux and Windows
         os: [ ubuntu-24.04 ]
-        branch: [ 1.20.x ]
+        branch: [ 1.21.x ]
     runs-on: ${{ matrix.os }}
     steps:
       - name: checkout repository
@@ -32,6 +32,6 @@ jobs:
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           prerelease: false
-          automatic_release_tag: 1.0.1
+          automatic_release_tag: 1.0.2
           files: |
             build/libs/*.jar
