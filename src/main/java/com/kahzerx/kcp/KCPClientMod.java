@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 
 public class KCPClientMod implements ClientModInitializer {
     private final Logger LOGGER = LogManager.getLogger();
+    public static String SRV_QUERY = "_minecraft._udp.%s";
 
     @SuppressWarnings("unused")
     @Override

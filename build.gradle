@@ -26,6 +26,8 @@ dependencies {
 
 	implementation 'org.apache.commons:commons-compress:1.22'
 	include 'org.apache.commons:commons-compress:1.22'
+	implementation 'dnsjava:dnsjava:3.5.3'
+	include 'dnsjava:dnsjava:3.5.3'
 }
 
 processResources {

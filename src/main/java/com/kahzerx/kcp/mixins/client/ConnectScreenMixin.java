@@ -1,5 +1,7 @@
 package com.kahzerx.kcp.mixins.client;
 
+import com.kahzerx.kcp.KCPClientMod;
+import com.kahzerx.kcp.KCPMod;
 import com.kahzerx.kcp.kcp.KCPExecutor;
 import com.kahzerx.kcp.protocol.Protocols;
 import com.kahzerx.kcp.protocol.ServerInfoInterface;
@@ -14,6 +16,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.xbill.DNS.*;
+import org.xbill.DNS.Record;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -37,8 +41,23 @@ public class ConnectScreenMixin {
             e.printStackTrace();
             return;
         }
-        new KCPExecutor().runClient(address.getAddress(), address.getPort(), localPort);
-        KCPExecutor.waitForKCP();
+        String hostname = address.getAddress();
+        int port = address.getPort();
+        try {
+            Lookup lookup = new Lookup(String.format(KCPClientMod.SRV_QUERY, hostname), Type.SRV);
+            Record[] records = lookup.run();
+            if (records == null || records.length == 0) {
+                new KCPExecutor().runClient(address.getAddress(), port, localPort);
+                KCPExecutor.waitForKCP();
+                return;
+            }
+            SRVRecord record = (SRVRecord)records[0];
+            new KCPExecutor().runClient(record.getTarget().toString(), record.getPort(), localPort);
+            KCPExecutor.waitForKCP();
+        } catch (TextParseException e) {
+            new KCPExecutor().runClient(address.getAddress(), port, localPort);
+            KCPExecutor.waitForKCP();
+        }
     }
 }
 
