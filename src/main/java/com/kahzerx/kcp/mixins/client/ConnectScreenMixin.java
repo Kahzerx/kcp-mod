@@ -52,7 +52,7 @@ public class ConnectScreenMixin {
                 return;
             }
             SRVRecord record = (SRVRecord)records[0];
-            new KCPExecutor().runClient(record.getTarget().toString(), record.getPort(), localPort);
+            new KCPExecutor().runClient(record.getTarget().toString(true), record.getPort(), localPort);
             KCPExecutor.waitForKCP();
         } catch (TextParseException e) {
             new KCPExecutor().runClient(address.getAddress(), port, localPort);
